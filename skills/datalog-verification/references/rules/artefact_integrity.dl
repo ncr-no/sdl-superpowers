@@ -1,0 +1,13 @@
+# Artefact integrity. The manifest facts come from slice 3's Deputy extractor;
+# until it runs, a dependency check is UNDECIDABLE rather than PASS.
+
+check("artefact/declared_dependency_present").
+undecidable("artefact/declared_dependency_present", P) :-
+    edge(P, "depends_on", D), not manifest_known(P).
+manifest_known(P) :- manifest_declares(P, D).
+violation("artefact/declared_dependency_present", P) :-
+    edge(P, "depends_on", D), manifest_known(P), not manifest_declares(P, D).
+
+check("artefact/no_secret_material").
+violation("artefact/no_secret_material", F) :- pattern_hit(F, "private_key").
+violation("artefact/no_secret_material", F) :- pattern_hit(F, "cloud_credential").

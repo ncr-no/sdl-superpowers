@@ -1,0 +1,19 @@
+# Classification: a node with no level cannot be assessed, and a link that
+# crosses levels is only acceptable when the exercise says so.
+
+check("classification/host_has_classification").
+# `not classification(N, L)` would leave L bound nowhere; the engine rejects
+# that as unsafe negation. `classified/1` is the existential form.
+violation("classification/host_has_classification", N) :-
+    node(N, T), not classified(N).
+classified(N) :- classification(N, L).
+
+check("classification/cross_zone_edge_allowed").
+# Only node-to-node edges are crossings; a service has no level of its own.
+undecidable("classification/cross_zone_edge_allowed", B) :-
+    edge(A, R, B), node(A, NA), node(B, NB), classified(A), not classified(B).
+undecidable("classification/cross_zone_edge_allowed", A) :-
+    edge(A, R, B), node(A, NA), node(B, NB), classified(B), not classified(A).
+violation("classification/cross_zone_edge_allowed", A) :-
+    edge(A, R, B), node(A, NA), node(B, NB), classification(A, CA),
+    classification(B, CB), CA != CB, not allowed(CA, CB).
