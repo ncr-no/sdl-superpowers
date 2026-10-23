@@ -1,6 +1,6 @@
 # Superpowers
 
-Superpowers is a complete software development methodology for your coding agents, built on top of a set of composable skills and some initial instructions that make sure your agent uses them.
+Superpowers is a complete cyber range exercise development methodology for your coding agents, built on top of a set of composable skills and some initial instructions that make sure your agent uses them.
 
 ## Table of Contents
 
@@ -34,13 +34,13 @@ Superpowers is a complete software development methodology for your coding agent
 
 ## How it works
 
-It starts from the moment you fire up your coding agent. As soon as it sees that you're building something, it *doesn't* just jump into trying to write code. Instead, it steps back and asks you what you're really trying to do. 
+It starts from the moment you fire up your coding agent. As soon as it sees that you're building an exercise, it *doesn't* just jump into writing artefacts. Instead, it steps back and asks what the exercise is meant to teach and who it is for.
 
-Once it's teased a spec out of the conversation, it shows it to you in chunks short enough to actually read and digest. 
+Once it has teased objectives, audience, scope, classification, and constraints out of the conversation, it writes a design spec and shows it to you in chunks short enough to actually read and digest.
 
-After you've signed off on the design, your agent puts together an implementation plan that's clear enough for an enthusiastic junior engineer with poor taste, no judgement, no project context, and an aversion to testing to follow. It emphasizes true red/green TDD, YAGNI (You Aren't Gonna Need It), and DRY. 
+After you've signed off on the design, your agent turns it into exercise artefacts — a scenario blueprint in SDL, Deputy packages, exercise content, and an inject timeline — validating each one before moving on. The blueprint must parse, package dependencies must resolve, and every learning objective must have at least one inject and one assessment criterion.
 
-Next up, once you say "go", it launches a *subagent-driven-development* process, having agents work through each engineering task, inspecting and reviewing their work, and continuing forward. It's not uncommon for your agent to work autonomously for a couple hours at a time without deviating from the plan you put together.
+Next it writes the conduct plan — roles, inject schedule, escalation paths, and stop conditions — and after the exercise, the evaluation and after-action report. It's not uncommon for your agent to work autonomously through the artefact set without deviating from the plan you put together.
 
 There's a bunch more to it, but that's the core of the system. And because the skills trigger automatically, you don't need to do anything special. Your coding agent just has Superpowers.
 
