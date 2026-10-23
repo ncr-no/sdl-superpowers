@@ -49,7 +49,7 @@ session_context="<EXTREMELY_IMPORTANT>\nYou have superpowers.\n\n**Below is the 
 # Muse sets MUSE_PLUGIN_ROOT and expects additionalContext (SDK standard).
 #
 # Uses printf instead of heredoc to work around bash 5.3+ heredoc hang.
-# See: https://github.com/obra/superpowers/issues/571
+# See: https://github.com/ncr-no/sdl-superpowers/issues/571
 #
 # emit_json pipes printf through `cat` when cat is on PATH, to absorb EPIPE
 # on Windows. On Windows + Git Bash, the harness can close the hook's stdout
