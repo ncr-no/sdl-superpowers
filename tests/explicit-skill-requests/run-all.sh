@@ -80,6 +80,28 @@ else
 fi
 echo ""
 
+# Test 7: sdl-authoring is invoked when named
+echo ">>> Test 7: sdl-authoring-please"
+if "$SCRIPT_DIR/run-test.sh" "sdl-authoring" "$PROMPTS_DIR/please-use-sdl-authoring.txt" 5; then
+    PASSED=$((PASSED + 1))
+    RESULTS="$RESULTS\nPASS: sdl-authoring-please"
+else
+    FAILED=$((FAILED + 1))
+    RESULTS="$RESULTS\nFAIL: sdl-authoring-please"
+fi
+echo ""
+
+# Test 8: datalog-verification is invoked when named
+echo ">>> Test 8: datalog-verification-please"
+if "$SCRIPT_DIR/run-test.sh" "datalog-verification" "$PROMPTS_DIR/please-use-datalog-verification.txt" 5; then
+    PASSED=$((PASSED + 1))
+    RESULTS="$RESULTS\nPASS: datalog-verification-please"
+else
+    FAILED=$((FAILED + 1))
+    RESULTS="$RESULTS\nFAIL: datalog-verification-please"
+fi
+echo ""
+
 echo "=== Summary ==="
 echo -e "$RESULTS"
 echo ""

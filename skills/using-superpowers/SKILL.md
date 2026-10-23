@@ -52,7 +52,8 @@ Exercise work turns on decisions only your human partner can make. Ask.
 When multiple skills apply, process skills come first — they set the approach, then artefact skills carry it out.
 
 - "We need an exercise on X" → `brainstorming`, then `exercise-design`.
-- "Build the blueprint" → `sdl-authoring` (planned), validated before anything else proceeds.
+- "Build the blueprint" → `sdl-authoring`, validated before anything else proceeds.
+- "Check the exercise hangs together" → `datalog-verification`, before development builds against it.
 - "Something is broken in the range" → `systematic-debugging`, then the relevant artefact skill.
 
 ## Red Flags
