@@ -26,7 +26,23 @@ while IFS= read -r token; do
     [ -n "$token" ] || continue
 
     if [ -f "$REPO_ROOT/skills/$token/SKILL.md" ]; then
-        echo "  [PASS] $token is installed"
+        # A skill that now exists must not still be advertised as planned — the
+        # marker was true when it was written and turns into a lie the moment
+        # the skill lands.
+        # Match the marker, not the line: one line can name several skills and
+        # mark only one of them planned. A marker that belongs to this skill
+        # follows its name and no other skill name intervenes.
+        stale="$(
+            grep -niE "\`$token\`[^|\`]*\((planned|not yet installed|not installed)\)" \
+                "$SKILL_FILE" || true
+        )"
+        if [ -z "$stale" ]; then
+            echo "  [PASS] $token is installed and not marked planned"
+        else
+            echo "  [FAIL] $token is installed but still marked as planned:"
+            printf '%s\n' "$stale" | sed 's/^/      /'
+            failures=$((failures + 1))
+        fi
         continue
     fi
 
