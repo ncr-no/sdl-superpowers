@@ -1,0 +1,14 @@
+{
+  "artefact/declared_dependency_present": "UNKNOWN",
+  "artefact/no_secret_material": "VIOLATION",
+  "classification/cross_zone_edge_allowed": "VIOLATION",
+  "classification/host_has_classification": "VIOLATION",
+  "scenario/documents_present": "PASS",
+  "scenario/inject_target_exists": "VIOLATION",
+  "scenario/objective_has_criterion": "PASS",
+  "scenario/objective_has_inject": "VIOLATION",
+  "structural/dependencies_acyclic": "PASS",
+  "structural/no_orphan_nodes": "PASS",
+  "structural/service_has_host": "PASS",
+  "structural/source_resolves": "PASS"
+}

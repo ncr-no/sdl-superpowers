@@ -1,0 +1,20 @@
+{
+  "node": [["web01", "VM"], ["dmz", "Switch"], ["db01", "VM"]],
+  "feature": [["nginx_svc", "service"], ["cert_svc", "configuration"]],
+  "edge": [
+    ["web01", "has_feature", "nginx_svc"],
+    ["web01", "has_feature", "cert_svc"],
+    ["web01", "links", "dmz"],
+    ["db01", "links", "web01"],
+    ["nginx_svc", "depends_on", "cert_svc"]
+  ],
+  "source": [["web01", "ubuntu22"]],
+  "registry_package": [["ubuntu22", "public"]],
+  "objective": [["obj-1"], ["obj-2"]],
+  "criterion": [["crit-1", "obj-1"], ["crit-2", "obj-2"]],
+  "inject": [["inj-1"]],
+  "inject_target": [["inj-1", "ghost-host"]],
+  "assessment_maps": [["crit-1", "inj-1"]],
+  "classification": [["web01", "public"], ["db01", "restricted"]],
+  "pattern_hit": [["content/site.yaml", "private_key"]]
+}
