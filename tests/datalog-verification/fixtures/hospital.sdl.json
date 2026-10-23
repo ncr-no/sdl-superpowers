@@ -1,0 +1,20 @@
+{
+  "name": "hospital-ransomware",
+  "description": "Hospital network under ransomware pressure",
+  "nodes": {
+    "ehr01": {"type": "VM", "source": "ubuntu22", "features": {"ehr_svc": "default"}},
+    "fileserver01": {"type": "VM", "source": "windows2022"},
+    "backup01": {"type": "VM", "source": "truenas", "features": {"backup_svc": "default"}},
+    "fwsrv": {"type": "Switch"}
+  },
+  "features": {
+    "ehr_svc": {"type": "service", "source": "ehr", "dependencies": ["auth_svc"]},
+    "auth_svc": {"type": "configuration", "source": "sso"},
+    "backup_svc": {"type": "service", "source": "restic"}
+  },
+  "infrastructure": {
+    "ehr01": {"count": 1, "links": ["fwsrv"]},
+    "fileserver01": {"count": 1, "links": ["fwsrv"], "dependencies": ["backup01"]},
+    "backup01": {"count": 1, "links": ["fwsrv"]}
+  }
+}
