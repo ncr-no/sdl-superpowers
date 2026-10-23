@@ -35,6 +35,7 @@ fi
 
 check "name: exercise-design" "frontmatter names the skill"
 check "exercises/<slug>/design.md" "names the design spec output path"
+check "look for an existing" "tells the agent to find the project's own location first"
 
 for section in \
     "## What this phase produces" \

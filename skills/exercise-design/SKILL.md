@@ -11,8 +11,10 @@ worked — and writing that down so the next phase can build against it.
 
 ## What this phase produces
 
-One design spec at `exercises/<slug>/design.md` (ask if the project keeps
-exercises somewhere else). It carries:
+One design spec at `exercises/<slug>/design.md`. First, look for an existing
+`exercises/` directory or a documented place for exercise material and use
+that; if the project has neither, ask before creating a top-level directory
+it did not have. The spec carries:
 
 - terminal and enabling learning objectives, each observable
 - audience: roles, current competence, prerequisites, team size
@@ -94,7 +96,8 @@ the objective is not yet observable — go back to it.
 
 ## The design spec
 
-Write `exercises/<slug>/design.md` with these sections, in this order:
+Write `exercises/<slug>/design.md` — or the location you found above — with
+these sections, in this order:
 Purpose, Objectives, Audience, Scope, Classification, Scenario premise,
 Assessment criteria, Constraints, Open questions, Traceability stub.
 

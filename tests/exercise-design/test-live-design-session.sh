@@ -45,13 +45,23 @@ else
     exit 1
 fi
 
-if printf '%s' "$text" | grep -qiE 'objective|audience|scope|classification'; then
-    echo "  [PASS] it asked for a design input"
+# The skill's own vocabulary is paraphrased freely, so the question is judged by
+# its shape, not its words: a reply that asks something and hands the decision
+# back is doing the phase's work.
+if printf '%s' "$text" | grep -q '?'; then
+    echo "  [PASS] it asked a question rather than delivering a design"
 else
-    echo "  [FAIL] it did not ask for any design input"
+    echo "  [FAIL] it delivered without asking"
     printf '%s\n' "$text" | sed 's/^/    /'
     exit 1
 fi
+
+if printf '%s' "$text" | grep -qiE '^#+ .*(objective|criteria)|terminal objective'; then
+    echo "  [FAIL] it wrote objectives or criteria it was not given"
+    printf '%s\n' "$text" | sed 's/^/    /'
+    exit 1
+fi
+echo "  [PASS] it invented no objectives or criteria"
 
 # The failure mode this phase exists to prevent: a design written from guesses.
 if find "$project" -name design.md -print -quit | grep -q .; then
