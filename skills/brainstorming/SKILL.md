@@ -1,6 +1,6 @@
 ---
 name: brainstorming
-description: "You MUST use this before any creative work - creating features, building components, adding functionality, modifying behavior, or planning anything new, in software or out of it (a talk, a business, a renovation)."
+description: "You MUST use this before any creative work - designing a cyber range exercise or drill, creating features, building components, adding functionality, modifying behavior, or planning anything new, in software or out of it (a talk, a business, a renovation)."
 ---
 
 # Brainstorming
@@ -8,7 +8,7 @@ description: "You MUST use this before any creative work - creating features, bu
 You are very good at building. You build what you believe your human
 partner wants, and that belief is usually thinner than it feels. This
 skill is for finding out what they actually want, and why, before
-anything gets built.
+anything gets built — a range exercise, a scenario service, a talk.
 
 People often haven't finished working out what they want. Good questions
 help them think it through. When you understand the why, you make the
@@ -29,7 +29,10 @@ Before you start implementing, you must, in order:
    human partner pick one (see Lay out the approaches).
 2. Write the design doc, short or full (see Size the Work).
 3. Get their approval of that doc.
-4. Invoke the superpowers:writing-plans skill.
+4. Hand the approved design to the next phase. For a cyber range
+   exercise that is `exercise-design`, which turns the design into the
+   exercise design spec; for software work, invoke
+   superpowers:writing-plans.
 
 Two things aren't implementing: a spike they said yes to (see Spike to
 feel things out), and doing what they asked once they've opted out of
@@ -257,7 +260,9 @@ stays labeled throwaway, and keeping what it produced is a new request
 that comes back through this gate.
 
 After the design doc is approved, the next step is the plan: invoke
-superpowers:writing-plans and no other skill.
+superpowers:writing-plans and no other skill. The exception is a cyber
+range exercise, where the approved design goes to `exercise-design`
+first — that exercise's plan is written once its design spec exists.
 </HARD-GATE>
 
 ## Red Flags
