@@ -166,9 +166,9 @@ fi
 
 claude_home="$(make_home claude-code)"
 assert_command_output \
-    "Claude Code emits nested SessionStart additionalContext" \
+    "Claude Code emits nested SessionStart additionalContext with the exercise methodology" \
     "nested" \
-    "" \
+    "cyber range exercise development methodology" \
     "" \
     "$claude_home" \
     CLAUDE_PLUGIN_ROOT="$REPO_ROOT" \
