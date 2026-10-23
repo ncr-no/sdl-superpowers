@@ -14,7 +14,9 @@ fail() { echo "  [FAIL] $1"; failures=$((failures + 1)); }
 
 for pair in \
     "exercise-design:please-use-exercise-design.txt" \
-    "brainstorming:we-need-an-exercise.txt"; do
+    "brainstorming:we-need-an-exercise.txt" \
+    "sdl-authoring:please-use-sdl-authoring.txt" \
+    "datalog-verification:please-use-datalog-verification.txt"; do
     skill="${pair%%:*}"
     file="${pair##*:}"
 
