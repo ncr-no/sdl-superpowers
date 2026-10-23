@@ -1,0 +1,23 @@
+# Structural invariants. The parser guarantees references resolve; it does
+# not guarantee the graph is sensible. These rules cover the four the spec
+# names: every service is hosted, no node is stranded, dependencies are
+# acyclic, and every referenced package resolves.
+
+check("structural/service_has_host").
+violation("structural/service_has_host", F) :- feature(F, T), not hosted(F).
+hosted(F) :- node(N, T), edge(N, "has_feature", F).
+
+check("structural/no_orphan_nodes").
+violation("structural/no_orphan_nodes", N) :- node(N, T), not connected(N).
+connected(N) :- edge(N, R, O).
+connected(N) :- edge(O, R, N).
+
+check("structural/dependencies_acyclic").
+violation("structural/dependencies_acyclic", A) :- edge(A, "depends_on", B), reaches(B, A).
+reaches(X, Y) :- edge(X, "depends_on", Y).
+reaches(X, Y) :- reaches(X, Z), edge(Z, "depends_on", Y).
+
+check("structural/source_resolves").
+# Absent registry facts mean slice 3 has not run yet: UNDECIDABLE, not PASS.
+undecidable("structural/source_resolves", P) :- source(N, P), not registry_known(P).
+registry_known(P) :- registry_package(P, V).

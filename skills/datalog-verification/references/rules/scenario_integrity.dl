@@ -1,0 +1,24 @@
+# Scenario integrity: the exercise documents must hang together, and must
+# exist at all. An empty objective set means the documents were not supplied
+# — UNDECIDABLE. Treating that as PASS would certify an exercise with no
+# objectives.
+
+check("scenario/documents_present").
+undecidable("scenario/documents_present", "no exercise documents were provided") :-
+    not has_objective().
+has_objective() :- objective(O).
+
+check("scenario/objective_has_criterion").
+violation("scenario/objective_has_criterion", O) :- objective(O), not has_criterion(O).
+has_criterion(O) :- criterion(C, O).
+
+check("scenario/objective_has_inject").
+violation("scenario/objective_has_inject", O) :- objective(O), not has_inject(O).
+has_inject(O) :- inject_for(O, I).
+inject_for(O, I) :- criterion(C, O), assessment_maps(C, I), inject(I).
+
+check("scenario/inject_target_exists").
+violation("scenario/inject_target_exists", I) :-
+    inject(I), inject_target(I, T), not known_entity(T).
+known_entity(X) :- node(X, T).
+known_entity(X) :- feature(X, T).
