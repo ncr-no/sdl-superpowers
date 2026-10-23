@@ -29,7 +29,19 @@ undecidable("group/name", Subject) :- atom(Subject), not known(Subject).
 | `violation("id", subject…)` | It fails for that subject |
 | `undecidable("id", reason…)` | It cannot be judged — say why |
 
-A check with neither is PASS. A check that never appears is a bug in the pack.
+A check with neither is PASS. A check that never appears is a bug in the
+pack, and `verify.py` fails the run rather than skipping it.
+
+A PASS must mean the rule looked and found nothing — not that nothing was
+there to look at. When a check's input facts may be absent, guard it:
+
+```
+undecidable("group/name", "no scanning facts were provided") :-
+    not has_pattern_hit(), not scan_complete("secrets").
+```
+
+Absence of the fact is UNDECIDABLE. Only a marker that the work was done —
+such as `scan_complete("secrets")` for an empty hit set — earns a PASS.
 
 ## Available facts
 
@@ -39,6 +51,10 @@ A check with neither is PASS. A check that never appears is a bug in the pack.
 | `objective/1`, `criterion/2`, `inject/1`, `inject_target/2`, `assessment_maps/2` | Exercise documents |
 | `classification/2`, `allowed/2` | Exercise classification |
 | `registry_package/2`, `manifest_declares/2`, `pattern_hit/2` | Deputy / scanning (slice 3) |
+| `scan_complete/1` | The scanner covered the artefacts — one row per scan kind |
+
+The scanner emits `scan_complete("secrets")` once it has checked every
+artefact. Without it, an empty `pattern_hit` set proves nothing.
 
 ## Adding a pack
 

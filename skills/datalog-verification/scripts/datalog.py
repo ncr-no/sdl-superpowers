@@ -83,18 +83,24 @@ def _term(tok, anon):
     raise DatalogError("expected a term, found %r" % (tok,))
 
 
+def _tok(tokens, i, source, what):
+    if i >= len(tokens):
+        raise DatalogError("%s: unexpected end of program while reading %s" % (source, what))
+    return tokens[i]
+
+
 def _atom(tokens, i, source, anon):
-    kind, pred = tokens[i]
+    kind, pred = _tok(tokens, i, source, "a predicate")
     if kind != "ident":
         raise DatalogError("%s: expected a predicate, found %r" % (source, pred))
-    if tokens[i + 1][0] != "(":
+    if _tok(tokens, i + 1, source, "the arguments of %r" % pred)[0] != "(":
         raise DatalogError("%s: predicate %r is missing '('" % (source, pred))
     i += 2
     args = []
-    while tokens[i][0] != ")":
+    while _tok(tokens, i, source, "the arguments of %r" % pred)[0] != ")":
         args.append(_term(tokens[i], anon))
         i += 1
-        if tokens[i][0] == ",":
+        if _tok(tokens, i, source, "the arguments of %r" % pred)[0] == ",":
             i += 1
         elif tokens[i][0] != ")":
             raise DatalogError("%s: expected ',' or ')' in %r" % (source, pred))
@@ -107,7 +113,7 @@ def parse_program(text, source="<string>"):
     while i < len(tokens):
         anon = [0]
         head, i = _atom(tokens, i, source, anon)
-        if tokens[i][0] == ".":
+        if _tok(tokens, i, source, "'.' after %r" % head.pred)[0] == ".":
             # A bare atom is a base fact, which is how packs declare
             # `check("structural/no_orphan_nodes").`
             rules.append(Rule(head, (), (), (), source))
@@ -118,7 +124,7 @@ def parse_program(text, source="<string>"):
         i += 1
         body, negated, filters = [], [], []
         while True:
-            kind = tokens[i][0]
+            kind = _tok(tokens, i, source, "a body item for %r" % head.pred)[0]
             if kind == "not":
                 atom, i = _atom(tokens, i + 1, source, anon)
                 negated.append(atom)
@@ -128,13 +134,18 @@ def parse_program(text, source="<string>"):
             else:
                 atom, i = _atom(tokens, i, source, anon)
                 body.append(atom)
-            if tokens[i][0] == ",":
+            if _tok(tokens, i, source, "',' or '.' after a body item")[0] == ",":
                 i += 1
                 continue
             if tokens[i][0] == ".":
                 i += 1
                 break
             raise DatalogError("%s: expected ',' or '.' after a body item" % source)
+        for left, right in filters:
+            for operand in (left, right):
+                if not isinstance(operand, Var):
+                    raise DatalogError(
+                        '%s: "!=" compares two variables; %r is a constant' % (source, operand))
         _check_negation_safety(head, body, negated, source)
         rules.append(Rule(head, tuple(body), tuple(negated), tuple(filters), source))
     return rules
@@ -151,9 +162,26 @@ def _check_negation_safety(head, body, negated, source):
             )
 
 
+def validate_facts(data):
+    """Reject shapes that would otherwise fail as an unreadable traceback.
+
+    A fact set is `{predicate: [[arg, …], …]}`. Anything else is a malformed
+    input file, which the caller reports as a failed run.
+    """
+    if not isinstance(data, dict):
+        raise ValueError("facts must be an object mapping predicate to rows")
+    for pred, rows in data.items():
+        if not isinstance(rows, (list, tuple)) or isinstance(rows, (str, bytes)):
+            raise ValueError("facts for %r must be a list of rows" % (pred,))
+        for row in rows:
+            if not isinstance(row, (list, tuple)) or isinstance(row, (str, bytes)):
+                raise ValueError("every row for %r must be a list of arguments" % (pred,))
+    return data
+
+
 def parse_facts(data):
     facts = {}
-    for pred, rows in data.items():
+    for pred, rows in validate_facts(data).items():
         for row in rows:
             facts.setdefault(pred, set()).add(tuple(row))
     return facts

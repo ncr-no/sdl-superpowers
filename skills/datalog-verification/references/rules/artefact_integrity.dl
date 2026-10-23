@@ -11,3 +11,9 @@ violation("artefact/declared_dependency_present", P) :-
 check("artefact/no_secret_material").
 violation("artefact/no_secret_material", F) :- pattern_hit(F, "private_key").
 violation("artefact/no_secret_material", F) :- pattern_hit(F, "cloud_credential").
+# No hit and no scan marker means nothing was scanned — UNDECIDABLE, not
+# PASS. The scanner emits scan_complete("secrets") once it has covered the
+# artefacts, which is the only evidence that an empty hit set means clean.
+undecidable("artefact/no_secret_material", "no scanning facts were provided") :-
+    not has_pattern_hit(), not scan_complete("secrets").
+has_pattern_hit() :- pattern_hit(F, K).

@@ -38,6 +38,7 @@ def test_all_pass_exits_zero(tmp_path):
         "assessment_maps": [["crit-1", "inj-1"]],
         "classification": [["web01", "public"], ["dmz", "public"]],
         "manifest_declares": [["nginx_svc", "cert_svc"]],
+        "scan_complete": [["secrets"]],
     })
     result = run(facts)
     assert result.returncode == 0, result.stdout + result.stderr
@@ -95,3 +96,40 @@ def test_rule_directory_without_packs_fails_loudly(tmp_path):
     result = run(os.path.join(FIXTURES, "violation-facts.json"), rules=str(empty))
     assert result.returncode == 3
     assert "no .dl files" in result.stderr
+
+
+def test_rules_that_declare_no_check_fail_instead_of_reporting_pass(tmp_path):
+    rules = tmp_path / "rules"
+    rules.mkdir()
+    (rules / "empty.dl").write_text("# a pack with no invariants\n")
+    result = run(os.path.join(FIXTURES, "violation-facts.json"), rules=str(rules))
+    assert result.returncode == 3
+    assert "check" in result.stderr
+
+
+def test_a_violation_for_an_undeclared_check_id_fails_the_run(tmp_path):
+    rules = tmp_path / "rules"
+    rules.mkdir()
+    (rules / "ghost.dl").write_text(
+        'check("ghost/known").\n'
+        'violation("ghost/unknown", X) :- node(X, T).\n'
+    )
+    result = run(os.path.join(FIXTURES, "violation-facts.json"), rules=str(rules))
+    assert result.returncode == 3
+    assert "ghost/unknown" in result.stderr
+
+
+def test_a_truncated_rule_file_fails_the_run(tmp_path):
+    rules = tmp_path / "rules"
+    rules.mkdir()
+    (rules / "broken.dl").write_text('check("broken/one").\nviolation("broken/one", X) :- node(X, T')
+    result = run(os.path.join(FIXTURES, "violation-facts.json"), rules=str(rules))
+    assert result.returncode == 3
+    assert "broken.dl" in result.stderr
+
+
+def test_malformed_facts_fail_the_run(tmp_path):
+    facts = write(tmp_path, "malformed.json", {"node": [1]})
+    result = run(facts)
+    assert result.returncode == 3
+    assert "node" in result.stderr

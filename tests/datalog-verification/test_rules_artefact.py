@@ -37,6 +37,18 @@ def test_dependency_declared_in_the_manifest_passes():
         "manifest_declares": [["nginx_svc", "cert_svc"]],
     })
     assert result.facts.get("violation", set()) == set()
+    assert not any(row[0] == "artefact/declared_dependency_present"
+                   for row in result.facts.get("undecidable", set()))
+
+
+def test_no_scanning_facts_is_undecidable_not_a_pass():
+    result = verdict({})
+    assert ("artefact/no_secret_material", "no scanning facts were provided") in result.facts["undecidable"]
+
+
+def test_a_completed_scan_with_no_hits_passes():
+    result = verdict({"scan_complete": [["secrets"]]})
+    assert result.facts.get("violation", set()) == set()
     assert result.facts.get("undecidable", set()) == set()
 
 

@@ -9,15 +9,22 @@ undecidable("scenario/documents_present", "no exercise documents were provided")
 has_objective() :- objective(O).
 
 check("scenario/objective_has_criterion").
+undecidable("scenario/objective_has_criterion", "no exercise documents were provided") :-
+    not has_objective().
 violation("scenario/objective_has_criterion", O) :- objective(O), not has_criterion(O).
 has_criterion(O) :- criterion(C, O).
 
 check("scenario/objective_has_inject").
+undecidable("scenario/objective_has_inject", "no exercise documents were provided") :-
+    not has_objective().
 violation("scenario/objective_has_inject", O) :- objective(O), not has_inject(O).
 has_inject(O) :- inject_for(O, I).
 inject_for(O, I) :- criterion(C, O), assessment_maps(C, I), inject(I).
 
 check("scenario/inject_target_exists").
+undecidable("scenario/inject_target_exists", "no inject target facts were provided") :-
+    not has_inject_target().
+has_inject_target() :- inject_target(I, T).
 violation("scenario/inject_target_exists", I) :-
     inject(I), inject_target(I, T), not known_entity(T).
 known_entity(X) :- node(X, T).

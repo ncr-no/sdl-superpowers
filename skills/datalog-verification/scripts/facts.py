@@ -15,6 +15,8 @@ from __future__ import annotations
 
 import json
 
+from datalog import validate_facts
+
 
 def _rows(facts, pred, rows):
     facts.setdefault(pred, []).extend([list(row) for row in rows])
@@ -72,7 +74,7 @@ def from_sdl(parsed):
 def merge(*fact_dicts):
     seen, merged = {}, {}
     for facts in fact_dicts:
-        for pred, rows in facts.items():
+        for pred, rows in validate_facts(facts).items():
             bucket = seen.setdefault(pred, set())
             out = merged.setdefault(pred, [])
             for row in rows:

@@ -93,3 +93,22 @@ def test_derivation_records_the_body_facts():
 def test_duplicate_facts_are_deduplicated():
     result = run('x(A) :- a(A).', {"a": [["v"], ["v"]]})
     assert result.facts["x"] == {("v",)}
+
+
+def test_a_truncated_program_is_a_datalog_error_not_an_index_error():
+    with pytest.raises(DatalogError) as excinfo:
+        parse_program('x(A) :- a(A', source="broken.dl")
+    assert "broken.dl" in str(excinfo.value)
+
+
+def test_comparing_a_variable_to_a_constant_is_rejected():
+    with pytest.raises(DatalogError) as excinfo:
+        run('x(A) :- a(A), A != "b".', {"a": [["v"]]})
+    assert "!=" in str(excinfo.value)
+
+
+def test_facts_that_are_not_a_row_list_raise_value_error():
+    with pytest.raises(ValueError):
+        parse_facts({"node": [1]})
+    with pytest.raises(ValueError):
+        parse_facts(["node"])

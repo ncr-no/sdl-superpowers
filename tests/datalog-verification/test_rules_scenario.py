@@ -34,6 +34,23 @@ def test_no_documents_is_undecidable_not_vacuous_pass():
                for row in result.facts["undecidable"])
 
 
+def test_no_documents_leaves_every_scenario_check_undecidable():
+    result = verdict({})
+    ids = {row[0] for row in result.facts["undecidable"]}
+    assert ids == {
+        "scenario/documents_present",
+        "scenario/objective_has_criterion",
+        "scenario/objective_has_inject",
+        "scenario/inject_target_exists",
+    }
+
+
+def test_injects_without_target_facts_are_undecidable_not_a_vacuous_pass():
+    result = verdict({"inject": [["inj-1"]]})
+    assert any(row[0] == "scenario/inject_target_exists"
+               for row in result.facts["undecidable"])
+
+
 def test_complete_documents_pass_every_scenario_check():
     result = verdict(DOCUMENTED)
     assert result.facts.get("violation", set()) == set()

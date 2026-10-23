@@ -11,6 +11,7 @@ import glob
 import json
 import os
 import sys
+import traceback
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
@@ -52,8 +53,16 @@ def _atom(row):
 
 def run(facts, rules):
     result = evaluate(rules, parse_facts(facts))
+    declared = {row[0] for row in result.facts.get("check", ())}
+    if not declared:
+        raise DatalogError("the rules declare no check(\"…\") — there is nothing to verify")
+    for predicate in ("violation", "undecidable"):
+        for row in result.facts.get(predicate, ()):
+            if row[0] not in declared:
+                raise DatalogError(
+                    "%s %r has no matching check(%r)" % (predicate, row[0], row[0]))
     rows = []
-    for (rule_id,) in sorted(result.facts.get("check", ())):
+    for rule_id in sorted(declared):
         violations = sorted(
             row for row in result.facts.get("violation", ()) if row[0] == rule_id
         )
@@ -101,6 +110,10 @@ def main(argv=None):
         rows = run(load_facts(args.facts), load_rules(args.rules))
     except (DatalogError, OSError, ValueError) as error:
         print("verify: %s" % error, file=sys.stderr)
+        return 3
+    except Exception as error:  # a crash is a failed run, never a verdict
+        traceback.print_exc()
+        print("verify: internal error: %s" % error, file=sys.stderr)
         return 3
 
     if args.json:
