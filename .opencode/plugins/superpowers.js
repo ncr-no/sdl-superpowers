@@ -130,6 +130,8 @@ const getBootstrapContent = (toolMapping) => {
   _bootstrapCache.set(toolMapping, `<EXTREMELY_IMPORTANT>
 You have superpowers.
 
+This plugin provides a cyber range exercise development methodology (design, develop, conduct, evaluate), not a software development methodology. Walk the exercise through those phases, and ask your human partner whenever a skill tells you to — using the harness question tool when one is available.
+
 **IMPORTANT: The using-superpowers skill content is included below. It is ALREADY LOADED - you are currently following it. Do NOT use the skill tool to load "using-superpowers" again - that would be redundant.**
 
 ${content}

@@ -67,6 +67,8 @@ ${BOOTSTRAP_MARKER}
 
 You have superpowers.
 
+This plugin provides a cyber range exercise development methodology (design, develop, conduct, evaluate), not a software development methodology. Walk the exercise through those phases, and ask your human partner whenever a skill tells you to — using the harness question tool when one is available.
+
 The using-superpowers skill content is included below and is already loaded for this Pi session. Follow it now. Do not try to load using-superpowers again.
 
 ${body}
