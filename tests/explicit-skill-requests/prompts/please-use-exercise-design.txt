@@ -1,0 +1,1 @@
+please use the exercise-design skill to design a ransomware exercise for a hospital network

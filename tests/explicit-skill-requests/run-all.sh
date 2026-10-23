@@ -58,6 +58,28 @@ else
 fi
 echo ""
 
+# Test: please use exercise-design
+echo ">>> Test 5: exercise-design-please"
+if "$SCRIPT_DIR/run-test.sh" "exercise-design" "$PROMPTS_DIR/please-use-exercise-design.txt" 5; then
+    PASSED=$((PASSED + 1))
+    RESULTS="$RESULTS\nPASS: exercise-design-please"
+else
+    FAILED=$((FAILED + 1))
+    RESULTS="$RESULTS\nFAIL: exercise-design-please"
+fi
+echo ""
+
+# Test: we need an exercise (no skill named; must route to brainstorming)
+echo ">>> Test 6: we-need-an-exercise"
+if "$SCRIPT_DIR/run-test.sh" "brainstorming" "$PROMPTS_DIR/we-need-an-exercise.txt"; then
+    PASSED=$((PASSED + 1))
+    RESULTS="$RESULTS\nPASS: we-need-an-exercise"
+else
+    FAILED=$((FAILED + 1))
+    RESULTS="$RESULTS\nFAIL: we-need-an-exercise"
+fi
+echo ""
+
 echo "=== Summary ==="
 echo -e "$RESULTS"
 echo ""
