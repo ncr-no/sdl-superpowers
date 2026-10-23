@@ -21,12 +21,14 @@ Superpowers is a **cyber range exercise development methodology**. It takes an e
 
 ## The lifecycle
 
+Four phases, each owned by a skill. **None of the four is installed yet — they are planned and ship in later slices.** Until they do, walk the phase yourself and ask your human partner for its inputs; never substitute a software skill for a missing one, and never fill the gap by inventing what the phase was meant to produce.
+
 | Phase | Skill | Produces |
 |---|---|---|
-| Design | `exercise-design` | objectives, audience, scope, classification, assessment criteria |
-| Develop | `exercise-develop` | SDL blueprint, Deputy packages, exercise content, inject timeline |
-| Conduct | `exercise-conduct` | white-cell plan, runbook, inject schedule, stop conditions |
-| Evaluate | `exercise-evaluate` | criterion-level evidence, AAR, improvement actions |
+| Design | `exercise-design` (planned) | objectives, audience, scope, classification, assessment criteria |
+| Develop | `exercise-develop` (planned) | SDL blueprint, Deputy packages, exercise content, inject timeline |
+| Conduct | `exercise-conduct` (planned) | white-cell plan, runbook, inject schedule, stop conditions |
+| Evaluate | `exercise-evaluate` (planned) | criterion-level evidence, AAR, improvement actions |
 
 ## The Rule
 
@@ -49,8 +51,8 @@ Exercise work turns on decisions only your human partner can make. Ask.
 
 When multiple skills apply, process skills come first — they set the approach, then artefact skills carry it out.
 
-- "We need an exercise on X" → `brainstorming`, then `exercise-design`.
-- "Build the blueprint" → `sdl-authoring`, validated before anything else proceeds.
+- "We need an exercise on X" → `brainstorming`, then `exercise-design` (planned).
+- "Build the blueprint" → `sdl-authoring` (planned), validated before anything else proceeds.
 - "Something is broken in the range" → `systematic-debugging`, then the relevant artefact skill.
 
 ## Red Flags
