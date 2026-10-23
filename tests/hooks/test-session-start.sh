@@ -174,6 +174,16 @@ assert_command_output \
     CLAUDE_PLUGIN_ROOT="$REPO_ROOT" \
     bash "$HOOK_UNDER_TEST"
 
+frame_home="$(make_home methodology-frame)"
+assert_command_output \
+    "SessionStart framing names the exercise methodology" \
+    "nested" \
+    "This plugin provides a cyber range exercise development methodology" \
+    "" \
+    "$frame_home" \
+    CLAUDE_PLUGIN_ROOT="$REPO_ROOT" \
+    bash "$HOOK_UNDER_TEST"
+
 wrapper_home="$(make_home run-hook-wrapper)"
 assert_command_output \
     "run-hook.cmd wrapper dispatches to the named session-start script" \
