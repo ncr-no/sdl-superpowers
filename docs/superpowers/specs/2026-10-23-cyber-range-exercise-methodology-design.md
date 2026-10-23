@@ -64,9 +64,14 @@ All figures measured with `scripts/skill-metrics.sh` (introduced by slice 0) on
 | using-superpowers | 65 | 8 | 6% | 29 |
 | **Total** | **3,331** | **84** | | |
 
-Density is the share of words matching software vocabulary (code, git, commit,
-branch, merge, pull request, refactor, compile, lint, bug, debug, unit test,
-repository, repo) in each SKILL.md.
+Density is software-keyword hits (code, git, commit, branch, merge, pull
+request, refactor, compile, lint, bug, debug, unit test, repository, repo) per
+100 SKILL.md lines, rounded to the nearest percent — the figure
+`scripts/skill-metrics.sh` prints. The reference column counts files outside
+each skill's own directory; it was measured at commit `5fa4940`, so later
+documentation (including this spec) raises today's counts. The
+`using-superpowers` row is likewise the pre-rewrite measurement; slice 0
+changes that skill to 88 lines.
 
 ### 2.2 What changes
 

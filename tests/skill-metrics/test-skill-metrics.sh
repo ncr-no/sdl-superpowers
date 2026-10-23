@@ -40,6 +40,47 @@ else
     failures=$((failures + 1))
 fi
 
+# --- fixture skills: zero keyword hits, zero references, rounding boundary ---
+# Slice 6 strips software vocabulary and slice 1 adds skills nothing references
+# yet, so both zero cases must render a row instead of aborting the table.
+fixture_root="$(mktemp -d)"
+trap 'rm -rf "$fixture_root"' EXIT
+
+quiet_name="fixture-quiet-$$"
+mkdir -p "$fixture_root/$quiet_name"
+printf '# Quiet\n\nAn exercise with objectives and nothing else.\n' \
+    > "$fixture_root/$quiet_name/SKILL.md"
+
+round_name="fixture-round-$$"
+mkdir -p "$fixture_root/$round_name"
+{
+    printf '# Round\n'
+    printf 'code\n'
+    i=0
+    while [ "$i" -lt 198 ]; do
+        printf 'word\n'
+        i=$((i + 1))
+    done
+} > "$fixture_root/$round_name/SKILL.md"
+
+fixture_output="$(SKILLS_DIR="$fixture_root" bash "$REPO_ROOT/scripts/skill-metrics.sh")"
+
+if printf '%s\n' "$fixture_output" | grep -Fq "| $quiet_name | 3 | 1 | 0% | 0 |"; then
+    echo "  [PASS] a skill with no software keywords and no references renders a row"
+else
+    echo "  [FAIL] a skill with no software keywords and no references should render"
+    printf '%s\n' "$fixture_output" | sed 's/^/      /'
+    failures=$((failures + 1))
+fi
+
+if printf '%s\n' "$fixture_output" | grep -Fq "| $round_name | 200 | 1 | 1% | 0 |"; then
+    echo "  [PASS] density rounds to the nearest percent (1 hit per 200 lines is 1%)"
+else
+    echo "  [FAIL] density should round to the nearest percent, not floor"
+    printf '%s\n' "$fixture_output" | sed 's/^/      /'
+    failures=$((failures + 1))
+fi
+
 if [ "$failures" -gt 0 ]; then
     echo "STATUS: FAILED ($failures failure(s))"
     exit 1
