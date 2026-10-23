@@ -1,11 +1,10 @@
 # Superpowers
 
-Superpowers is a complete software development methodology for your coding agents, built on top of a set of composable skills and some initial instructions that make sure your agent uses them.
+Superpowers is a complete cyber range exercise development methodology for your coding agents, built on top of a set of composable skills and some initial instructions that make sure your agent uses them.
 
 ## Table of Contents
 
 - [How it works](#how-it-works)
-- [Commercial Services](#commercial-services)
 - [Getting Started](#installation)
   - [Claude Code](#claude-code)
   - [Antigravity](#antigravity)
@@ -35,19 +34,15 @@ Superpowers is a complete software development methodology for your coding agent
 
 ## How it works
 
-It starts from the moment you fire up your coding agent. As soon as it sees that you're building something, it *doesn't* just jump into trying to write code. Instead, it steps back and asks you what you're really trying to do. 
+It starts from the moment you fire up your coding agent. As soon as it sees that you're building an exercise, it *doesn't* just jump into writing artefacts. Instead, it steps back and asks what the exercise is meant to teach and who it is for.
 
-Once it's teased a spec out of the conversation, it shows it to you in chunks short enough to actually read and digest. 
+Once it has teased objectives, audience, scope, classification, and constraints out of the conversation, it writes a design spec and shows it to you in chunks short enough to actually read and digest.
 
-After you've signed off on the design, your agent puts together an implementation plan that's clear enough for an enthusiastic junior engineer with poor taste, no judgement, no project context, and an aversion to testing to follow. It emphasizes true red/green TDD, YAGNI (You Aren't Gonna Need It), and DRY. 
+After you've signed off on the design, your agent turns it into exercise artefacts — a scenario blueprint in SDL, Deputy packages, exercise content, and an inject timeline — validating each one before moving on. The blueprint must parse, package dependencies must resolve, and every learning objective must have at least one inject and one assessment criterion.
 
-Next up, once you say "go", it launches a *subagent-driven-development* process, having agents work through each engineering task, inspecting and reviewing their work, and continuing forward. It's not uncommon for your agent to work autonomously for a couple hours at a time without deviating from the plan you put together.
+Next it writes the conduct plan — roles, inject schedule, escalation paths, and stop conditions — and after the exercise, the evaluation and after-action report. It's not uncommon for your agent to work autonomously through the artefact set without deviating from the plan you put together.
 
 There's a bunch more to it, but that's the core of the system. And because the skills trigger automatically, you don't need to do anything special. Your coding agent just has Superpowers.
-
-## Commercial Services
-
-If you're using Superpowers in enterprise and could benefit from commercial support, additional tooling, or managed spending, please don't hesitate to drop us a line at sales@primeradiant.com.
 
 ## Installation
 
@@ -55,30 +50,20 @@ Installation differs by harness. If you use more than one, install Superpowers s
 
 ### Claude Code
 
-Superpowers is available via the [official Claude plugin marketplace](https://claude.com/plugins/superpowers)
+#### Plugin Marketplace
 
-#### Official Marketplace
-
-- Install the plugin from Anthropic's official marketplace:
-
-  ```bash
-  /plugin install superpowers@claude-plugins-official
-  ```
-
-#### Superpowers Marketplace
-
-The Superpowers marketplace provides Superpowers and some other related plugins for Claude Code.
+This repository ships a Claude Code marketplace.
 
 - Register the marketplace:
 
   ```bash
-  /plugin marketplace add obra/superpowers-marketplace
+  /plugin marketplace add ncr-no/sdl-superpowers
   ```
 
 - Install the plugin from this marketplace:
 
   ```bash
-  /plugin install superpowers@superpowers-marketplace
+  /plugin install superpowers@superpowers-dev
   ```
 
 ### Antigravity
@@ -86,7 +71,7 @@ The Superpowers marketplace provides Superpowers and some other related plugins 
 Install Superpowers as a plugin from this repository:
 
 ```bash
-agy plugin install https://github.com/obra/superpowers
+agy plugin install https://github.com/ncr-no/sdl-superpowers
 ```
 
 Antigravity lists each installed skill's description, and the description of
@@ -134,7 +119,7 @@ Superpowers is available via the [official Codex plugin marketplace](https://git
 - Install the plugin from this repository:
 
   ```bash
-  devin plugins install obra/superpowers
+  devin plugins install ncr-no/sdl-superpowers
   ```
 
 - Update to the latest version with:
@@ -148,7 +133,7 @@ Superpowers is available via the [official Codex plugin marketplace](https://git
 - Register the marketplace:
 
   ```bash
-  droid plugin marketplace add https://github.com/obra/superpowers
+  droid plugin marketplace add https://github.com/ncr-no/sdl-superpowers
   ```
 
 - Install the plugin:
@@ -162,7 +147,7 @@ Superpowers is available via the [official Codex plugin marketplace](https://git
 - Install the extension:
 
   ```bash
-  gemini extensions install https://github.com/obra/superpowers
+  gemini extensions install https://github.com/ncr-no/sdl-superpowers
   ```
 
 - Update later:
@@ -176,13 +161,13 @@ Superpowers is available via the [official Codex plugin marketplace](https://git
 - Register the marketplace:
 
   ```bash
-  copilot plugin marketplace add obra/superpowers-marketplace
+  copilot plugin marketplace add ncr-no/sdl-superpowers
   ```
 
 - Install the plugin:
 
   ```bash
-  copilot plugin install superpowers@superpowers-marketplace
+  copilot plugin install superpowers@superpowers-dev
   ```
 
 ### Grok Build CLI
@@ -216,7 +201,7 @@ Superpowers is available in Kimi Code's plugin marketplace.
 - Or install directly from this repository:
 
   ```text
-  /plugins install https://github.com/obra/superpowers
+  /plugins install https://github.com/ncr-no/sdl-superpowers
   ```
 
 - Detailed docs: [docs/README.kimi.md](docs/README.kimi.md)
@@ -229,7 +214,7 @@ already use it in another harness.
 - Tell OpenCode:
 
   ```
-  Fetch and follow instructions from https://raw.githubusercontent.com/obra/superpowers/refs/heads/main/.opencode/INSTALL.md
+  Fetch and follow instructions from https://raw.githubusercontent.com/ncr-no/sdl-superpowers/refs/heads/main/.opencode/INSTALL.md
   ```
 
 - Detailed docs: [docs/README.opencode.md](docs/README.opencode.md)
@@ -239,7 +224,7 @@ already use it in another harness.
 Install Superpowers as a Pi package from this repository:
 
 ```bash
-pi install git:github.com/obra/superpowers
+pi install git:github.com/ncr-no/sdl-superpowers
 ```
 
 For local development, run Pi with this checkout loaded as a temporary package:
@@ -257,7 +242,7 @@ Qwen Code installs plugins from Claude Code marketplaces directly.
 - Install the plugin from this repository, and pick `superpowers` when prompted:
 
   ```bash
-  qwen extensions install obra/superpowers
+  qwen extensions install ncr-no/sdl-superpowers
   ```
 
 - Update later:
@@ -271,7 +256,7 @@ Qwen Code installs plugins from Claude Code marketplaces directly.
 Install Superpowers as a Hermes plugin from this repository:
 
 ```bash
-hermes plugins install obra/superpowers --enable
+hermes plugins install ncr-no/sdl-superpowers --enable
 ```
 
 Restart any active Hermes sessions after installing. Note: Hermes has no
@@ -292,8 +277,8 @@ Superpowers is available as a native Muse plugin — same repo, same skills, all
   Or clone and install:
 
   ```bash
-  git clone https://github.com/obra/superpowers.git
-  muse plugins install ./superpowers
+  git clone https://github.com/ncr-no/sdl-superpowers.git
+  muse plugins install ./sdl-superpowers
   muse plugins approve superpowers
   ```
 
@@ -331,11 +316,7 @@ The skill reads the session transcript, reports what happened with line-level ev
 
 ## Community
 
-Superpowers is built by [Jesse Vincent](https://blog.fsck.com) and the rest of the folks at [Prime Radiant](https://primeradiant.com).
-
-- **Discord**: [Join us](https://discord.gg/35wsABTejz) for community support, questions, and sharing what you're building with Superpowers
-- **Issues**: https://github.com/obra/superpowers/issues
-- **Release announcements**: [Sign up](https://primeradiant.com/superpowers/) to get notified about new versions
+- **Issues**: https://github.com/ncr-no/sdl-superpowers/issues
 
 ## What's Inside
 
@@ -370,8 +351,6 @@ Superpowers is built by [Jesse Vincent](https://blog.fsck.com) and the rest of t
 - **Systematic over ad-hoc** - Process over guessing
 - **Complexity reduction** - Simplicity as primary goal
 - **Evidence over claims** - Verify before declaring success
-
-Read [the original release announcement](https://blog.fsck.com/2025/10/09/superpowers/).
 
 ## Contributing
 

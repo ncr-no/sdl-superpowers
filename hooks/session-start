@@ -38,7 +38,7 @@ escape_for_json() {
 }
 
 using_superpowers_escaped=$(escape_for_json "$using_superpowers_content")
-session_context="<EXTREMELY_IMPORTANT>\nYou have superpowers.\n\n**Below is the full content of your 'superpowers:using-superpowers' skill - your introduction to using skills. For all other skills, use the 'Skill' tool:**\n\n${using_superpowers_escaped}\n</EXTREMELY_IMPORTANT>"
+session_context="<EXTREMELY_IMPORTANT>\nYou have superpowers.\n\nThis plugin provides a cyber range exercise development methodology (design, develop, conduct, evaluate), not a software development methodology. Walk the exercise through those phases, and ask your human partner whenever a skill tells you to — using the harness question tool when one is available.\n\n**Below is the full content of your 'superpowers:using-superpowers' skill - your introduction to using skills. For all other skills, use the 'Skill' tool:**\n\n${using_superpowers_escaped}\n</EXTREMELY_IMPORTANT>"
 
 # Output context injection as JSON.
 # Cursor hooks expect additional_context (snake_case).
@@ -49,7 +49,7 @@ session_context="<EXTREMELY_IMPORTANT>\nYou have superpowers.\n\n**Below is the 
 # Muse sets MUSE_PLUGIN_ROOT and expects additionalContext (SDK standard).
 #
 # Uses printf instead of heredoc to work around bash 5.3+ heredoc hang.
-# See: https://github.com/obra/superpowers/issues/571
+# See: https://github.com/ncr-no/sdl-superpowers/issues/571
 #
 # emit_json pipes printf through `cat` when cat is on PATH, to absorb EPIPE
 # on Windows. On Windows + Git Bash, the harness can close the hook's stdout

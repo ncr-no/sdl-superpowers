@@ -165,12 +165,25 @@ else
 fi
 
 claude_home="$(make_home claude-code)"
+# Assert a phrase unique to the rewritten skill body. The methodology phrase is
+# also in the hook's own framing paragraph, so it alone would pass even with the
+# old software-development skill installed.
 assert_command_output \
-    "Claude Code emits nested SessionStart additionalContext" \
+    "Claude Code emits nested SessionStart additionalContext with the exercise skill body" \
     "nested" \
-    "" \
+    "Asking instead of guessing" \
     "" \
     "$claude_home" \
+    CLAUDE_PLUGIN_ROOT="$REPO_ROOT" \
+    bash "$HOOK_UNDER_TEST"
+
+frame_home="$(make_home methodology-frame)"
+assert_command_output \
+    "SessionStart framing names the exercise methodology" \
+    "nested" \
+    "This plugin provides a cyber range exercise development methodology" \
+    "" \
+    "$frame_home" \
     CLAUDE_PLUGIN_ROOT="$REPO_ROOT" \
     bash "$HOOK_UNDER_TEST"
 
