@@ -58,7 +58,7 @@ Five inputs the spec does not describe, most likely to bite a person using this:
     `.facts: dict[str, set[tuple]]`, `.derivation(pred, args) -> tuple | None` (body fact tuples that produced it), `.rule_for(pred, args) -> Rule | None`.
   - `Atom(pred, args)` and `Rule(head, body, negated, source)` dataclasses; a variable arg is `Var(name)`.
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 ```python
 # tests/datalog-verification/test_datalog.py
@@ -159,7 +159,7 @@ def test_duplicate_facts_are_deduplicated():
     assert result.facts["x"] == {("v",)}
 ```
 
-- [ ] **Step 2: Run it and watch it fail**
+- [x] **Step 2: Run it and watch it fail**
 
 ```bash
 cd /Users/mmpeal/Developer/ncr/sdl-superpowers && python3 -m pytest tests/datalog-verification/test_datalog.py -q
@@ -167,7 +167,7 @@ cd /Users/mmpeal/Developer/ncr/sdl-superpowers && python3 -m pytest tests/datalo
 
 Expected: collection error, `ModuleNotFoundError: No module named 'datalog'`.
 
-- [ ] **Step 3: Write the engine**
+- [x] **Step 3: Write the engine**
 
 ```python
 # skills/datalog-verification/scripts/datalog.py
@@ -536,7 +536,7 @@ def _run_stratum(stratum, world, prov, arities):
     return world, prov
 ```
 
-- [ ] **Step 4: Run the tests**
+- [x] **Step 4: Run the tests**
 
 ```bash
 python3 -m pytest tests/datalog-verification/test_datalog.py -q
@@ -544,7 +544,7 @@ python3 -m pytest tests/datalog-verification/test_datalog.py -q
 
 Expected: 11 passed.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add skills/datalog-verification/scripts/datalog.py tests/datalog-verification/test_datalog.py
@@ -570,7 +570,7 @@ Co-Authored-By: Claude Code <noreply@anthropic.com>"
   - Relation labels, which later slices read: `links`, `depends_on`, `has_feature`, `has_inject`, `has_condition`.
   - Predicates: `node/2`, `feature/2`, `edge/3`, `source/2`, plus whatever document facts the file supplies (`objective/1`, `criterion/2`, `inject/1`, `inject_target/2`, `assessment_maps/2`, `classification/2`, `allowed/2`, `registry_package/2`, `manifest_declares/2`, `pattern_hit/2`).
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 ```python
 # tests/datalog-verification/test_facts.py
@@ -639,12 +639,12 @@ def test_fixture_is_valid_json_with_the_documented_shape():
     assert facts["edge"], "fixture must produce edges"
 ```
 
-- [ ] **Step 2: Run it and watch it fail**
+- [x] **Step 2: Run it and watch it fail**
 
 Run: `python3 -m pytest tests/datalog-verification/test_facts.py -q`
 Expected: `ModuleNotFoundError: No module named 'facts'`.
 
-- [ ] **Step 3: Write the extractor**
+- [x] **Step 3: Write the extractor**
 
 ```python
 # skills/datalog-verification/scripts/facts.py
@@ -738,7 +738,7 @@ def load(path):
         return json.load(handle)
 ```
 
-- [ ] **Step 4: Write the fixture**
+- [x] **Step 4: Write the fixture**
 
 ```json
 {
@@ -765,7 +765,7 @@ def load(path):
 
 Write it with the Write tool at `tests/datalog-verification/fixtures/hospital.sdl.json`.
 
-- [ ] **Step 5: Run the tests**
+- [x] **Step 5: Run the tests**
 
 ```bash
 python3 -m pytest tests/datalog-verification/test_facts.py -q
@@ -773,7 +773,7 @@ python3 -m pytest tests/datalog-verification/test_facts.py -q
 
 Expected: 5 passed.
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add skills/datalog-verification/scripts/facts.py tests/datalog-verification/test_facts.py tests/datalog-verification/fixtures/hospital.sdl.json
@@ -796,7 +796,7 @@ Co-Authored-By: Claude Code <noreply@anthropic.com>"
 - Consumes: `parse_program`, `parse_facts`, `evaluate` from Task 1; the predicate and relation names from Task 2.
 - Produces: the rule-author contract every later pack uses — a pack declares `check("id")` for each invariant, and derives either `violation("id", subject…)` or `undecidable("id", reason…)`. A check with neither is `PASS`. Pack files are `references/rules/*.dl`.
 
-- [ ] **Step 1: Write the failing structural tests**
+- [x] **Step 1: Write the failing structural tests**
 
 ```python
 # tests/datalog-verification/test_rules_structural.py
@@ -864,12 +864,12 @@ def test_source_without_registry_facts_is_undecidable():
                for row in result.facts["undecidable"])
 ```
 
-- [ ] **Step 2: Run them and watch them fail**
+- [x] **Step 2: Run them and watch them fail**
 
 Run: `python3 -m pytest tests/datalog-verification/test_rules_structural.py -q`
 Expected: 5 failed, each with `FileNotFoundError: .../references/rules/structural.dl`.
 
-- [ ] **Step 3: Write `structural.dl`**
+- [x] **Step 3: Write `structural.dl`**
 
 ```
 # Structural invariants. The parser guarantees references resolve; it does
@@ -897,12 +897,12 @@ undecidable("structural/source_resolves", P) :- source(N, P), not registry_known
 registry_known(P) :- registry_package(P, V).
 ```
 
-- [ ] **Step 4: Run the structural tests**
+- [x] **Step 4: Run the structural tests**
 
 Run: `python3 -m pytest tests/datalog-verification/test_rules_structural.py -q`
 Expected: 5 passed.
 
-- [ ] **Step 5: Write the failing scenario tests**
+- [x] **Step 5: Write the failing scenario tests**
 
 ```python
 # tests/datalog-verification/test_rules_scenario.py
@@ -965,12 +965,12 @@ def test_inject_target_missing_from_the_sdl_is_a_violation():
     assert ("scenario/inject_target_exists", "inj-1") in result.facts["violation"]
 ```
 
-- [ ] **Step 6: Run them and watch them fail**
+- [x] **Step 6: Run them and watch them fail**
 
 Run: `python3 -m pytest tests/datalog-verification/test_rules_scenario.py -q`
 Expected: 5 failed, each with `FileNotFoundError: .../scenario_integrity.dl`.
 
-- [ ] **Step 7: Write `scenario_integrity.dl`**
+- [x] **Step 7: Write `scenario_integrity.dl`**
 
 ```
 # Scenario integrity: the exercise documents must hang together, and must
@@ -1001,12 +1001,12 @@ known_entity(X) :- feature(X, T).
 
 Note the `undecidable` head spans two lines. The tokenizer treats newlines as whitespace, so a rule may wrap — that is worth an assertion of its own, and the test above already relies on it.
 
-- [ ] **Step 8: Run the scenario tests**
+- [x] **Step 8: Run the scenario tests**
 
 Run: `python3 -m pytest tests/datalog-verification/test_rules_scenario.py -q`
 Expected: 5 passed.
 
-- [ ] **Step 9: Commit**
+- [x] **Step 9: Commit**
 
 ```bash
 git add skills/datalog-verification/references/rules tests/datalog-verification/test_rules_structural.py tests/datalog-verification/test_rules_scenario.py
@@ -1029,7 +1029,7 @@ Co-Authored-By: Claude Code <noreply@anthropic.com>"
 - Consumes: engine and fact names as in Task 3; `!=` filters from Task 1.
 - Produces: `classification/2` and `allowed/2` are the fact names slice 5 reads; `manifest_declares/2` and `pattern_hit/2` are the names slice 3's extractor must supply.
 
-- [ ] **Step 1: Write the failing classification tests**
+- [x] **Step 1: Write the failing classification tests**
 
 ```python
 # tests/datalog-verification/test_rules_classification.py
@@ -1091,12 +1091,12 @@ def test_edge_with_one_unclassified_end_is_undecidable():
                for row in result.facts["undecidable"])
 ```
 
-- [ ] **Step 2: Run them and watch them fail**
+- [x] **Step 2: Run them and watch them fail**
 
 Run: `python3 -m pytest tests/datalog-verification/test_rules_classification.py -q`
 Expected: 5 failed on the missing `classification.dl`.
 
-- [ ] **Step 3: Write `classification.dl`**
+- [x] **Step 3: Write `classification.dl`**
 
 ```
 # Classification: a node with no level cannot be assessed, and a link that
@@ -1120,12 +1120,12 @@ violation("classification/cross_zone_edge_allowed", A) :-
     classification(B, CB), CA != CB, not allowed(CA, CB).
 ```
 
-- [ ] **Step 4: Run the classification tests**
+- [x] **Step 4: Run the classification tests**
 
 Run: `python3 -m pytest tests/datalog-verification/test_rules_classification.py -q`
 Expected: 5 passed.
 
-- [ ] **Step 5: Write the failing artefact tests**
+- [x] **Step 5: Write the failing artefact tests**
 
 ```python
 # tests/datalog-verification/test_rules_artefact.py
@@ -1181,12 +1181,12 @@ def test_cloud_credential_material_is_a_violation():
     assert ("artefact/no_secret_material", "content/provision.sh") in result.facts["violation"]
 ```
 
-- [ ] **Step 6: Run them and watch them fail**
+- [x] **Step 6: Run them and watch them fail**
 
 Run: `python3 -m pytest tests/datalog-verification/test_rules_artefact.py -q`
 Expected: 5 failed on the missing `artefact_integrity.dl`.
 
-- [ ] **Step 7: Write `artefact_integrity.dl`**
+- [x] **Step 7: Write `artefact_integrity.dl`**
 
 ```
 # Artefact integrity. The manifest facts come from slice 3's Deputy extractor;
@@ -1204,12 +1204,12 @@ violation("artefact/no_secret_material", F) :- pattern_hit(F, "private_key").
 violation("artefact/no_secret_material", F) :- pattern_hit(F, "cloud_credential").
 ```
 
-- [ ] **Step 8: Run the artefact tests**
+- [x] **Step 8: Run the artefact tests**
 
 Run: `python3 -m pytest tests/datalog-verification/test_rules_artefact.py -q`
 Expected: 5 passed.
 
-- [ ] **Step 9: Commit**
+- [x] **Step 9: Commit**
 
 ```bash
 git add skills/datalog-verification/references/rules tests/datalog-verification/test_rules_classification.py tests/datalog-verification/test_rules_artefact.py
@@ -1232,7 +1232,7 @@ Co-Authored-By: Claude Code <noreply@anthropic.com>"
 - Consumes: `evaluate`, `parse_program`, `parse_facts` (Task 1); `merge` (Task 2); all four packs (Tasks 3–4).
 - Produces: `python3 verify.py FACTS… [--rules DIR] [--json]`, exit `0` all PASS, `1` any VIOLATION, `2` any UNKNOWN; and `load_rules(path)`, `run(facts, rules) -> list[(id, status, evidence)]`, `render(rows) -> str` for later slices to call instead of shelling out.
 
-- [ ] **Step 1: Write the failing CLI tests**
+- [x] **Step 1: Write the failing CLI tests**
 
 ```python
 # tests/datalog-verification/test_verify_cli.py
@@ -1335,12 +1335,12 @@ def test_rule_directory_without_packs_fails_loudly(tmp_path):
     assert "no .dl files" in result.stderr
 ```
 
-- [ ] **Step 2: Run them and watch them fail**
+- [x] **Step 2: Run them and watch them fail**
 
 Run: `python3 -m pytest tests/datalog-verification/test_verify_cli.py -q`
 Expected: errors on `can't open file .../verify.py`.
 
-- [ ] **Step 3: Write `verify.py`**
+- [x] **Step 3: Write `verify.py`**
 
 ```python
 #!/usr/bin/env python3
@@ -1466,7 +1466,7 @@ if __name__ == "__main__":
 
 One trap in the test above: `run()` shadows pytest's own helper name, and `test_all_pass_exits_zero` expects `manifest_declares` present for `nginx_svc` because `nginx_svc` has no `depends_on` edge — so the artefact check has no subject and passes. Add the edge only where the test wants it; the clean fixture deliberately has none.
 
-- [ ] **Step 4: Write `violation-facts.json`**
+- [x] **Step 4: Write `violation-facts.json`**
 
 ```json
 {
@@ -1491,7 +1491,7 @@ One trap in the test above: `run()` shadows pytest's own helper name, and `test_
 }
 ```
 
-- [ ] **Step 5: Write `golden-verdicts.json`**
+- [x] **Step 5: Write `golden-verdicts.json`**
 
 The expected status of every check for that fixture, worked through by hand — `obj-2` has no mapped inject, `inj-1` targets a host the SDL does not define, `db01` and `web01` sit on different levels with no allowance, `nginx_svc` declares a dependency with no manifest facts, and one file carries key material:
 
@@ -1512,14 +1512,14 @@ The expected status of every check for that fixture, worked through by hand — 
 }
 ```
 
-- [ ] **Step 6: Run the CLI tests**
+- [x] **Step 6: Run the CLI tests**
 
 Run: `python3 -m pytest tests/datalog-verification/test_verify_cli.py -q`
 Expected: 7 passed.
 
 If a status differs from the golden file, the fixture and the golden disagree about the scenario, not about the engine — decide which is wrong, fix it, and ledger the correction rather than editing the assertion to match.
 
-- [ ] **Step 7: Commit**
+- [x] **Step 7: Commit**
 
 ```bash
 git add skills/datalog-verification/scripts/verify.py tests/datalog-verification/test_verify_cli.py tests/datalog-verification/fixtures/violation-facts.json tests/datalog-verification/fixtures/golden-verdicts.json
@@ -1540,7 +1540,7 @@ Co-Authored-By: Claude Code <noreply@anthropic.com>"
 - Consumes: nothing.
 - Produces: `check_sdl_parser() -> (status, detail)` and `check_deputy() -> (status, detail)`, status in `{"PASS", "UNKNOWN"}`, detail carrying the install command on `UNKNOWN`; `report() -> list[(name, status, detail)]`; `python3 provisioning.py` prints the table.
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 ```python
 # tests/datalog-verification/test_provisioning.py
@@ -1602,12 +1602,12 @@ def test_report_names_both_tools(monkeypatch):
     assert names == ["sdl_parser", "deputy"]
 ```
 
-- [ ] **Step 2: Run them and watch them fail**
+- [x] **Step 2: Run them and watch them fail**
 
 Run: `python3 -m pytest tests/datalog-verification/test_provisioning.py -q`
 Expected: `ModuleNotFoundError: No module named 'provisioning'`.
 
-- [ ] **Step 3: Write `provisioning.py`**
+- [x] **Step 3: Write `provisioning.py`**
 
 ```python
 #!/usr/bin/env python3
@@ -1662,12 +1662,12 @@ if __name__ == "__main__":
     raise SystemExit(main())
 ```
 
-- [ ] **Step 4: Run the tests**
+- [x] **Step 4: Run the tests**
 
 Run: `python3 -m pytest tests/datalog-verification/test_provisioning.py -q`
 Expected: 6 passed.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add skills/datalog-verification/scripts/provisioning.py tests/datalog-verification/test_provisioning.py
@@ -1691,7 +1691,7 @@ Co-Authored-By: Claude Code <noreply@anthropic.com>"
 - Consumes: `sdl_parser.parse_sdl(str) -> dict`, `sdl_parser.SDLLibraryParsingError` with `.message`.
 - Produces: `validate(path, parser=None) -> (code, message)` with code `0` valid, `1` parse failure, `2` parser unavailable; `python3 validate.py FILE`.
 
-- [ ] **Step 1: Write the failing validator tests**
+- [x] **Step 1: Write the failing validator tests**
 
 ```python
 # tests/sdl-authoring/test_validate.py
@@ -1761,12 +1761,12 @@ def test_missing_parser_is_unknown_with_install_steps(tmp_path, monkeypatch):
     assert "apt install libsdl-parser" in message
 ```
 
-- [ ] **Step 2: Run them and watch them fail**
+- [x] **Step 2: Run them and watch them fail**
 
 Run: `python3 -m pytest tests/sdl-authoring/test_validate.py -q`
 Expected: `ModuleNotFoundError: No module named 'validate'`.
 
-- [ ] **Step 3: Write `validate.py`**
+- [x] **Step 3: Write `validate.py`**
 
 ```python
 #!/usr/bin/env python3
@@ -1822,12 +1822,12 @@ if __name__ == "__main__":
 
 `test_missing_parser_is_unknown_with_install_steps` monkeypatches `validate.importlib.import_module`; `_parser()` must call it through the module attribute, which it does.
 
-- [ ] **Step 4: Run the validator tests**
+- [x] **Step 4: Run the validator tests**
 
 Run: `python3 -m pytest tests/sdl-authoring/test_validate.py -q`
 Expected: 4 passed.
 
-- [ ] **Step 5: Write `references/sdl-grammar.md`**
+- [x] **Step 5: Write `references/sdl-grammar.md`**
 
 ```markdown
 # The SDL schema
@@ -1886,7 +1886,7 @@ pip install <sdl-parser repo>/python-package
 ```
 ```
 
-- [ ] **Step 6: Write `skills/sdl-authoring/SKILL.md`**
+- [x] **Step 6: Write `skills/sdl-authoring/SKILL.md`**
 
 ````markdown
 ---
@@ -1990,7 +1990,7 @@ then to the development phase. An SDL that validates but fails the
 structural rules is not ready: fix the graph, not the rules.
 ````
 
-- [ ] **Step 7: Write the failing structural test**
+- [x] **Step 7: Write the failing structural test**
 
 ```bash
 #!/usr/bin/env bash
@@ -2054,12 +2054,12 @@ echo "STATUS: PASSED"
 
 Save as `tests/sdl-authoring/test-skill-structure.sh`, then `chmod +x` it.
 
-- [ ] **Step 8: Run it**
+- [x] **Step 8: Run it**
 
 Run: `bash tests/sdl-authoring/test-skill-structure.sh`
 Expected: `STATUS: PASSED`. This gate is written after the prose it checks — the RED for this task came from the validator tests in Steps 1–4. If it fails, the skill is missing a section the test names; fix the skill, not the test.
 
-- [ ] **Step 9: Commit**
+- [x] **Step 9: Commit**
 
 ```bash
 git add skills/sdl-authoring tests/sdl-authoring
@@ -2084,7 +2084,7 @@ Co-Authored-By: Claude Code <noreply@anthropic.com>"
 - Consumes: everything from Tasks 1–7.
 - Produces: the two skills the router can reach by name; a rule-author guide at `references/rules.md`.
 
-- [ ] **Step 1: Write the failing structural test**
+- [x] **Step 1: Write the failing structural test**
 
 ```bash
 #!/usr/bin/env bash
@@ -2150,7 +2150,7 @@ echo "STATUS: PASSED"
 
 Save as `tests/datalog-verification/test-skill-structure.sh`, `chmod +x`, run it once to watch it fail before writing the skill.
 
-- [ ] **Step 2: Write `skills/datalog-verification/SKILL.md`**
+- [x] **Step 2: Write `skills/datalog-verification/SKILL.md`**
 
 ````markdown
 ---
@@ -2233,7 +2233,7 @@ the scenario's integrity record. Anything else goes back to whoever owns the
 SDL or the exercise documents, with the evidence column quoted.
 ````
 
-- [ ] **Step 3: Write `references/rules.md`**
+- [x] **Step 3: Write `references/rules.md`**
 
 ````markdown
 # Writing rule packs
@@ -2285,12 +2285,12 @@ facts out. Then the pack. A rule whose test only covers PASS is untested —
 include the violating and the undecidable case.
 ````
 
-- [ ] **Step 4: Run the structural test**
+- [x] **Step 4: Run the structural test**
 
 Run: `bash tests/datalog-verification/test-skill-structure.sh`
 Expected: `STATUS: PASSED`.
 
-- [ ] **Step 5: Add the trigger fixtures**
+- [x] **Step 5: Add the trigger fixtures**
 
 ```bash
 cat > tests/explicit-skill-requests/prompts/please-use-sdl-authoring.txt <<'EOF'
@@ -2301,7 +2301,7 @@ please use the datalog-verification skill to check this exercise's SDL against t
 EOF
 ```
 
-- [ ] **Step 6: Register them in `run-all.sh`**
+- [x] **Step 6: Register them in `run-all.sh`**
 
 Append after Test 6, matching the file's existing shape:
 
@@ -2313,7 +2313,7 @@ run-test.sh "sdl-authoring" "$PROMPTS_DIR/please-use-sdl-authoring.txt" 5
 run-test.sh "datalog-verification" "$PROMPTS_DIR/please-use-datalog-verification.txt" 5
 ```
 
-- [ ] **Step 7: Run the registry and the new cases**
+- [x] **Step 7: Run the registry and the new cases**
 
 ```bash
 bash tests/explicit-skill-requests/test-fixture-registry.sh
@@ -2330,7 +2330,7 @@ PATH="/tmp/shim-bin:$PATH" bash tests/explicit-skill-requests/run-all.sh
 
 Expected: 8 passed, 0 failed.
 
-- [ ] **Step 8: Inventory and docs**
+- [x] **Step 8: Inventory and docs**
 
 Run:
 
@@ -2345,7 +2345,7 @@ If the inventory or docs tests name a missing skill entry, add
 the `using-superpowers` inventory table, then re-run. Both new `SKILL.md`
 files must stay under 20,000 bytes.
 
-- [ ] **Step 9: Commit**
+- [x] **Step 9: Commit**
 
 ```bash
 git add skills/datalog-verification/SKILL.md skills/datalog-verification/references/rules.md tests/datalog-verification/test-skill-structure.sh tests/explicit-skill-requests
