@@ -22,7 +22,10 @@ Superpowers is a complete cyber range exercise development methodology for your 
   - [Qwen Code](#qwen-code)
   - [Hermes Agent](#hermes-agent)
   - [Muse](#muse)
-- [The Basic Workflow](#the-basic-workflow)
+- [The Exercise Lifecycle](#the-exercise-lifecycle)
+  - [Order of execution](#order-of-execution)
+  - [What triggers what](#what-triggers-what)
+  - [Where the software skills fit](#where-the-software-skills-fit)
 - [When Something Goes Wrong](#when-something-goes-wrong)
 - [Community](#community)
 - [What's Inside](#whats-inside)
@@ -290,23 +293,72 @@ Superpowers is available as a native Muse plugin — same repo, same skills, all
 
 Restart any active Muse sessions after installing so the `SessionStart` hook takes effect — skills are active immediately, hooks require approval on first install. To verify, start a fresh session and send `Let's make a react todo list` — a working install auto-triggers `brainstorming` before any code is written. Version is tracked in `.version-bump.json` so `scripts/bump-version.sh` keeps it in sync.
 
-## The Basic Workflow
+## The Exercise Lifecycle
 
-1. **brainstorming** - Activates before building anything. Draws out what you actually want, and why, through questions that get you describing it, then plays its understanding back for correction. Small changes get agreed in chat; projects get a written design document a builder could plan from.
+The methodology covers four phases, following the NIST SP 800-84 exercise lifecycle: **design**, **develop**, **conduct**, **evaluate**. Each phase is owned by a phase skill; artefact skills do the work inside a phase, and process skills govern how the agent works throughout. The `using-superpowers` bootstrap loads at session start and routes every task into this structure.
 
-2. **using-git-worktrees** - Activates after design approval. Creates isolated workspace on new branch, runs project setup, verifies clean test baseline.
+```mermaid
+flowchart TD
+    BOOT["using-superpowers<br/>session-start bootstrap"] --> BS["brainstorming<br/>draw out intent, audience, constraints"]
+    BS --> ED["exercise-design<br/>objectives, scope, classification,<br/>assessment criteria → design spec"]
+    ED --> SA["sdl-authoring<br/>author .sdl blueprint"]
+    SA --> PV["sdl_parser validation<br/>syntax + referential closure"]
+    PV --> DV["datalog-verification<br/>PASS / VIOLATION / UNKNOWN<br/>with derivation traces"]
+    DV -- "VIOLATION → fix the graph" --> SA
+    DV -- "clean table" --> DEV["exercise-develop (planned)<br/>Deputy packages, exercise content,<br/>inject timeline"]
+    DEV --> CON["exercise-conduct (planned)<br/>white-cell plan, runbook,<br/>inject schedule, stop conditions"]
+    CON --> EVAL["exercise-evaluate (planned)<br/>criterion-level evidence,<br/>AAR, improvement actions"]
+```
 
-3. **writing-plans** - Activates with approved design. Breaks work into bite-sized tasks (2-5 minutes each). Every task has exact file paths, complete code, verification steps.
+Solid nodes are shipped skills; **(planned)** nodes ship in later slices — until they exist, the agent walks the phase by hand and asks you for its inputs rather than substituting a software skill or inventing what the phase should produce.
 
-4. **subagent-driven-development** or **executing-plans** - Activates with plan. Either dispatches a fresh subagent per task with a review after each (most thorough), or implements every task inline in the current session with one fresh review of the whole branch at the end (cheapest).
+### Order of execution
 
-5. **test-driven-development** - Activates during implementation. Enforces RED-GREEN-REFACTOR: write failing test, watch it fail, write minimal code, watch it pass, commit. Deletes code written before tests.
+| # | Skill | Status | When it fires | Produces | Hands off to |
+|---|---|---|---|---|---|
+| 0 | `using-superpowers` | shipped | session start | the methodology, the stop-and-ask rule, skill routing | everything below |
+| 1 | `brainstorming` | shipped | an exercise idea exists | a design brief you have corrected | `exercise-design` |
+| 2 | `exercise-design` | shipped | brief agreed | design spec: objectives, audience, scope, classification, criteria | `sdl-authoring` |
+| 3 | `sdl-authoring` | shipped | blueprint work begins | `.sdl` topology, accepted by `sdl_parser` | `datalog-verification` |
+| 4 | `datalog-verification` | shipped | before anything builds against the blueprint | traceability table: PASS / VIOLATION / UNKNOWN per check | development — or back to the SDL with evidence |
+| 5 | `writing-plans`, then `subagent-driven-development` or `executing-plans` | shipped | blueprint verified | build plan executed task-by-task, TDD throughout | `exercise-develop` (planned) |
+| 6 | `deputy-packages` | planned (slice 3) | — | discovered, inspected, verified Deputy packages | |
+| 7 | `exercise-content`, `inject-timeline` | planned (slice 4) | — | scenario narrative, parts, discussion questions, MSEL | |
+| 8 | `exercise-conduct` | planned (slice 5) | — | white-cell plan, runbook, inject schedule, escalation | |
+| 9 | `exercise-evaluate` | planned (slice 5) | — | criterion-level evidence, AAR, improvement actions | |
 
-6. **requesting-code-review** - Activates between tasks. Reviews against plan, reports issues by severity. Critical issues block progress.
+Verdict discipline: a check the facts cannot reach comes back **UNKNOWN**, never a quiet PASS — an UNKNOWN names what is missing and what would make it decidable.
 
-7. **finishing-a-development-branch** - Activates when tasks complete. Verifies tests, presents options (merge/PR/keep/discard), cleans up worktree.
+### What triggers what
 
-**The agent checks for relevant skills before any task.** Mandatory workflows, not suggestions.
+There is no registry — every harness scans `skills/*/SKILL.md` and routes on the `description:` frontmatter. In practice:
+
+| You say | The agent runs |
+|---|---|
+| "We need an exercise on X" | `brainstorming` → `exercise-design` |
+| "Build the blueprint" | `sdl-authoring` — validated before anything else proceeds |
+| "Check the exercise hangs together" | `datalog-verification` |
+| "Something is broken in the range" | `systematic-debugging`, then the relevant artefact skill |
+
+Skills are invoked **before** any action, including clarifying questions. Objectives, audience, classification and stop conditions are never invented — the agent asks you.
+
+### Where the software skills fit
+
+Exercise artefacts are software (scenario services, Deputy packages, validation scripts), so software practices apply while building them — never as substitutes for a missing phase skill:
+
+```mermaid
+flowchart LR
+    subgraph develop ["Inside the develop phase"]
+        WP["writing-plans"] --> SDD["subagent-driven-development<br/>or executing-plans"]
+        SDD --> TDD["test-driven-development"]
+        SDD --> CR["requesting / receiving<br/>code-review"]
+        SDD --> WT["using-git-worktrees"]
+        SDD --> FIN["finishing-a-development-branch"]
+    end
+    DEV["exercise-develop (planned)"] -. orchestrates .-> develop
+```
+
+Cross-cutting at every phase: `verification-before-completion` gates hand-offs (PASS / VIOLATION / BLOCKED), `systematic-debugging` isolates faults in range environments and artefacts, `diagnosing-superpowers` works out what went wrong when a skill misfires, and `writing-skills` maintains this library.
 
 ## When Something Goes Wrong
 
@@ -322,28 +374,39 @@ The skill reads the session transcript, reports what happened with line-level ev
 
 ### Skills Library
 
-**Testing**
-- **test-driven-development** - RED-GREEN-REFACTOR cycle (includes testing anti-patterns reference)
+**Bootstrap**
+- **using-superpowers** - Session-start bootstrap: the exercise methodology, the stop-and-ask rule, skill routing
 
-**Debugging**
-- **systematic-debugging** - 4-phase root cause process (includes root-cause-tracing, defense-in-depth, condition-based-waiting techniques)
-- **verification-before-completion** - Ensure it's actually fixed
-- **diagnosing-superpowers** - Work out what went wrong in a session, with evidence; export a scrubbed bundle or file an issue
+**Lifecycle phases** *(one skill owns each phase; see [The Exercise Lifecycle](#the-exercise-lifecycle))*
+- **exercise-design** - Elicits learning objectives, audience, scope, classification, and assessment criteria into a design spec *(shipped)*
+- **exercise-develop** - Orchestrates blueprint, packages, content, and inject timeline *(planned, slice 4)*
+- **exercise-conduct** - White-cell plan, runbook, inject schedule, escalation paths *(planned, slice 5)*
+- **exercise-evaluate** - Criterion-level evidence, AAR, improvement actions *(planned, slice 5)*
 
-**Collaboration** 
+**Artefact skills**
+- **sdl-authoring** - Authors `.sdl` blueprints by hand and validates them through `sdl_parser` *(shipped)*
+- **datalog-verification** - Stratified Datalog rule packs turn exercise facts into PASS / VIOLATION / UNKNOWN verdicts with derivation traces *(shipped)*
+- **deputy-packages** - Discover, inspect, and verify Deputy packages; publishing stays a human step *(planned, slice 3)*
+- **exercise-content** - Scenario narrative, parts, discussion questions *(planned, slice 4)*
+- **inject-timeline** - Injects, triggers, MSEL ordering *(planned, slice 4)*
+
+**Process skills** *(how the agent works while building artefacts)*
 - **brainstorming** - Drawing out intent before building
 - **writing-plans** - Detailed implementation plans
 - **executing-plans** - Inline plan execution: one context, one final review
+- **subagent-driven-development** - Fresh subagent per task with two-stage review (spec compliance, then code quality)
 - **dispatching-parallel-agents** - Concurrent subagent workflows
+- **test-driven-development** - RED-GREEN-REFACTOR cycle (includes testing anti-patterns reference)
+- **using-git-worktrees** - Isolated development branches
 - **requesting-code-review** - Pre-review checklist
 - **receiving-code-review** - Responding to feedback
-- **using-git-worktrees** - Parallel development branches
 - **finishing-a-development-branch** - Merge/PR decision workflow
-- **subagent-driven-development** - Fast iteration with two-stage review (spec compliance, then code quality)
+- **verification-before-completion** - Final gate: PASS / VIOLATION / BLOCKED
 
-**Meta**
+**Debugging and meta**
+- **systematic-debugging** - 4-phase root cause process (includes root-cause-tracing, defense-in-depth, condition-based-waiting techniques)
+- **diagnosing-superpowers** - Work out what went wrong in a session, with evidence; export a scrubbed bundle or file an issue
 - **writing-skills** - Create new skills following best practices (includes testing methodology)
-- **using-superpowers** - Introduction to the skills system
 
 ## Philosophy
 
